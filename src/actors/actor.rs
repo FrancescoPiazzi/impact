@@ -7,7 +7,7 @@ use crate::common::stats::Stats;
 pub struct Actor{
     body: Body,
     base_stats: Stats,
-    // stat_modifiers: Stats,
+    stat_modifiers: Stats,
     statuses: HashMap<StatusType, u32>,
 }
 
@@ -53,18 +53,17 @@ pub enum StatusType{
 
 
 impl Actor{
-    pub fn new(body: Body, base_stats: Stats, statuses: HashMap<StatusType, u32>) -> Actor{
+    pub fn new(body: Body, base_stats: Stats) -> Actor{
         Actor{
             body: body,
             base_stats: base_stats,
-            // TODO
-            // stat_modifiers: Stats::new(0, 0, 0, 0, 0, 0),
-            statuses: statuses,
+            stat_modifiers: Stats::new_zero(),
+            statuses: HashMap::new(),
         }
     }
 
     pub fn get_stats(&self) -> Stats{
-        self.base_stats //+ self.stat_modifiers
+        self.base_stats + self.stat_modifiers
     }
 }
 
@@ -142,32 +141,27 @@ impl Damageable for BodyPart {
 mod tests {
     use super::*;
 
-    // TODO
-    /*
     #[test]
     fn test_actor_new() {
         let body = Body::new(vec![], 180, 70, 0.5);
-        let stats = 
-        let statuses = HashMap::new();
-        let actor = Actor::new(body, base_stats, statuses);
+        let base_stats = Stats::new_random();
+        let actor = Actor::new(body, base_stats);
         assert_eq!(actor.base_stats, base_stats);
-        assert_eq!(actor.stat_modifiers, Stats::new(0, 0, 0, 0, 0, 0));
+        assert_eq!(actor.stat_modifiers, Stats::new_zero());
     }
-    */
 
     // TODO
-    /*
     #[test]
     fn test_actor_get_stats() {
         let body = Body::new(vec![], 180, 70, 0.5);
-        let base_stats = Stats::new(10, 10, 10, 10, 10, 10);
-        let statuses = HashMap::new();
-        let actor = Actor::new(body, base_stats.clone(), statuses);
-        actor.stat_modifiers = Stats::new(5, 5, 5, 5, 5, 5);
+        let base_stats = Stats::new_random();
+        let stat_modifiers = Stats::new_random();
+        let mut actor = Actor::new(body, base_stats.clone());
+        actor.stat_modifiers = stat_modifiers.clone();
+        assert_eq!(actor.stat_modifiers, stat_modifiers);
         let stats = actor.get_stats();
-        assert_eq!(stats, Stats::new(15, 15, 15, 15, 15, 15));
+        assert_eq!(stats, base_stats + stat_modifiers);
     }
-    */
 
     #[test]
     fn test_body_new() {
