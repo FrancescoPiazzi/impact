@@ -25,5 +25,17 @@ pub enum PoisonDamageType {
 
 pub struct Damage {
     pub damage_type: DamageType,
-    pub amount: f32,
+    pub amount: f32
+}
+
+#[derive(PartialEq, Debug)]
+pub enum DamageResult{
+    NoDamage,
+    Damage(f32),
+    Destroyed,
+    Killed,
+}
+
+pub trait Damageable {
+    fn damage(&mut self, damage: Damage) -> DamageResult;
 }
