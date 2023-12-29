@@ -5,7 +5,7 @@ use crate::objects::consumable::*;
 
 pub type Applied = Option<Box<dyn Applicable>>;
 
-trait Defend{
+pub trait Defend{
     fn defend(&self, damage: Damage) -> Damage;
 }
 
@@ -53,9 +53,7 @@ impl Defend for Weapon{
 #[cfg(test)]
 mod tests {
     use crate::common::damage::DamageType;
-    use crate::common::damage::PoisonDamageType;
     use crate::objects::weapons::common::*;
-    use crate::objects::weapons::melee::*;
 
 
     #[test]

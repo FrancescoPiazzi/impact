@@ -1,28 +1,29 @@
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DamageType {
     Physical(PhysicalDamageType),
     Elemental(ElementalDamageType),
     Poison(PoisonDamageType),
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum PhysicalDamageType {
     Pierce,
     Impact,
     Slash,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum ElementalDamageType {
     Cold,
     Heat,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum PoisonDamageType {
     Acid,
 }
 
+#[derive(Copy, Clone)]
 pub struct Damage {
     pub damage_type: DamageType,
     pub amount: f32
@@ -37,5 +38,7 @@ pub enum DamageResult{
 }
 
 pub trait Damageable {
-    fn damage(&mut self, damage: Damage) -> DamageResult;
+    fn damage(&mut self, damage: Damage) -> DamageResult{
+        DamageResult::Damage(damage.amount)
+    }
 }
