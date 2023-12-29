@@ -119,7 +119,6 @@ impl BodyPart{
 
 
 impl Damageable for BodyPart {
-    // TODO: move this into the default implementation of the trait and add difference between damage types
     fn damage(&mut self, damage: Damage) -> DamageResult{
         if damage.amount < self.armor_low as f32{
             DamageResult::NoDamage
@@ -154,7 +153,6 @@ mod tests {
         assert_eq!(actor.stat_modifiers, Stats::new_zero());
     }
 
-    // TODO
     #[test]
     fn test_actor_get_stats() {
         let body = Body::new(vec![], 180, 70);
