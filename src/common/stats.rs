@@ -5,74 +5,77 @@ use std::ops::Add;
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Stats{
-    raw_strength: u32,
-    strength: StrengthStat,
-    raw_perception: u32,
-    perception: PerceptionStat,
-    raw_endurance: u32,
-    endurance: EnduranceStat,
-    raw_charisma: u32,
-    charisma: CharismaStat,
-    raw_intelligence: u32,
-    intelligence: IntelligenceStat,
-    raw_agility: u32,
-    agility: AgilityStat,
+    pub raw_strength: u32,
+    pub strength: StrengthStat,
+    pub raw_perception: u32,
+    pub perception: PerceptionStat,
+    pub raw_endurance: u32,
+    pub endurance: EnduranceStat,
+    pub raw_charisma: u32,
+    pub charisma: CharismaStat,
+    pub raw_intelligence: u32,
+    pub intelligence: IntelligenceStat,
+    pub raw_agility: u32,
+    pub agility: AgilityStat,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct StrengthStat{
-    max_carry_weight: u32,
+    pub max_carry_weight: u32,
     // base force of a blow, influenced by the weight of the weapon, strength of the actor, and wind up time
-    base_melee_force: u32,
+    pub base_melee_force: u32,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct PerceptionStat{
-    vision: f32,
-    hearing: f32,
-    smell: f32,
-    taste: f32,
-    night_vision_modifier: f32,  // multiplied by vision to get cision in the dark
+    pub vision: f32,
+    pub hearing: f32,
+    pub smell: f32,
+    pub taste: f32,
+    pub night_vision_modifier: f32,  // multiplied by vision to get cision in the dark
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub struct EnduranceStat{
-    stamina: u32,
+    pub stamina: u32,
 
     // stamina used to move for a fixed amount of time, influenced by speed, terrain, weather, equipment...
-    base_stamina_used_for_movement: u32,
+    pub base_stamina_used_for_movement: u32,
 
     // stamina used to fight for a fixed amount of time influenced by weapon used, combat style...
-    base_stamina_used_for_fighting: u32
+    pub base_stamina_used_for_fighting: u32,
+
+    // health gained per unit of time
+    pub health_regen: f32,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct CharismaStat{
-    intimidation: f32,  
-    persuasion: f32,    
-    deception: f32,     // lying
-    performance: f32,   // acting
+    pub intimidation: f32,  
+    pub persuasion: f32,    
+    pub deception: f32,     // lying
+    pub performance: f32,   // acting
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct IntelligenceStat{
-    sensorary_memory: f32,
-    text_memory: f32,
-    learning: f32,
-    application: f32,
-    creativity: f32,
+    pub sensorary_memory: f32,
+    pub text_memory: f32,
+    pub learning: f32,
+    pub application: f32,
+    pub creativity: f32,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct AgilityStat{
-    max_sprint_speed: u32,
-    climbing: f32,
-    riding: f32,
-    swimming: f32,
-    parkour: f32,
-    stealth: f32,
-    acrobatics: f32,
-    pickpocting: f32,
+    pub max_sprint_speed: u32,
+    pub climbing: f32,
+    pub riding: f32,
+    pub swimming: f32,
+    pub parkour: f32,
+    pub stealth: f32,
+    pub acrobatics: f32,
+    pub pickpocting: f32,
 }
 
 impl StrengthStat{
@@ -97,11 +100,12 @@ impl PerceptionStat{
 }
 
 impl EnduranceStat{
-    pub fn new(stamina: u32, base_stamina_used_for_movement: u32, base_stamina_used_for_fighting: u32) -> EnduranceStat{
+    pub fn new(stamina: u32, base_stamina_used_for_movement: u32, base_stamina_used_for_fighting: u32, health_regen: f32) -> EnduranceStat{
         EnduranceStat{
             stamina: stamina,
             base_stamina_used_for_movement: base_stamina_used_for_movement,
             base_stamina_used_for_fighting: base_stamina_used_for_fighting,
+            health_regen: health_regen,
         }
     }
 }
@@ -182,7 +186,7 @@ impl Stats{
             0,
             PerceptionStat::new(0.0, 0.0, 0.0, 0.0, 0.0),
             0,
-            EnduranceStat::new(0, 0, 0),
+            EnduranceStat::new(0, 0, 0, 0.0),
             0,
             CharismaStat::new(0.0, 0.0, 0.0, 0.0),
             0,
@@ -215,6 +219,7 @@ impl Stats{
             rng.gen_range(1..=10),
             rng.gen_range(1..=10),
             rng.gen_range(1..=10),
+            rng.gen_range(0.001..=0.005),
         );
 
         let raw_charisma = rng.gen_range(1..=10);
@@ -262,6 +267,7 @@ impl Stats{
         )
     }
 }
+
 
 impl Add for Stats {
     type Output = Self;
@@ -317,6 +323,7 @@ impl Add for EnduranceStat {
             stamina: self.stamina + other.stamina,
             base_stamina_used_for_movement: self.base_stamina_used_for_movement + other.base_stamina_used_for_movement,
             base_stamina_used_for_fighting: self.base_stamina_used_for_fighting + other.base_stamina_used_for_fighting,
+            health_regen: self.health_regen + other.health_regen,
         }
     }
 }

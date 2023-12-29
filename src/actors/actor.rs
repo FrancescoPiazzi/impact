@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use crate::common::damage::*;
 use crate::common::position::*;
 use crate::common::stats::Stats;
+use crate::common::status::StatusType;
 
 pub struct Actor{
     body: Body,
@@ -27,32 +28,6 @@ pub struct BodyPart{
     armor_high: u32,        // anything more than this will destroy the body part
     x_position: XPosition,
     y_position: YPosition,
-}
-
-
-// TODO: move in common
-pub enum StatusType{
-    // control
-    Stun,      // unable to act and falls to the ground
-    Sleep,     // similar to stun, but can be woken up
-    Taunt,     // forced to attack the taunter
-    Rooted,    // unable to move lower parts of the body, but can still act
-    Charm,     // forced to attack allies
-    Terror,    // forced to flee
-    
-    // damage over time
-    Burn,
-    Freeze,
-
-    // good statuses
-    Invisible,
-    Unstoppable,    // immune to control statuses
-    Invincible,     // immune to any type of damage or control
-    Immortal,       // immune to death, but can take damage or be conrtolled
-    UnderwaterBreathing,
-
-    // neutral statuses
-    Ethereal,   // unable to act, but also unable to be acted upon
 }
 
 

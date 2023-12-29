@@ -1,4 +1,6 @@
 use crate::common::damage::PoisonDamageType;
+use crate::common::status::StatusType;
+use crate::common::stats::Stats;
 use crate::objects::object::Object;
 
 
@@ -6,34 +8,24 @@ use crate::objects::object::Object;
 pub trait Applicable{}
 
 
-pub struct DamagePotion{
+// object that can be consumed
+// a consumed object can give different statuses and stats for differents amounts of time
+pub struct Consumable {
     pub object: Object,
-    pub damage: PoisonDamageType,
+    pub effects: (Vec<(StatusType, u32)>, Vec<(Stats, u32)>),
 }
 
-pub struct HealthPotion{
-    pub object: Object,
-    pub health: u32,    // TODO: refine
-}
 
-impl DamagePotion{
-    pub fn new(object: Object, damage: PoisonDamageType) -> DamagePotion{
-        DamagePotion{
+impl Consumable {
+    pub fn new(
+        object: Object,
+        effects: (Vec<(StatusType, u32)>, Vec<(Stats, u32)>),
+    ) -> Consumable {
+        Consumable {
             object: object,
-            damage: damage,
+            effects: effects,
         }
     }
 }
 
-impl HealthPotion{
-    fn new(object: Object, health: u32) -> HealthPotion{
-        HealthPotion{
-            object: object,
-            health: health,
-        }
-    }
-}
-
-impl Applicable for DamagePotion{}
-
-impl Applicable for HealthPotion{}
+impl Applicable for Consumable{}

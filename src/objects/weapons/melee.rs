@@ -67,10 +67,10 @@ impl Poisonable for MeleeWeapon{
 
 #[cfg(test)]
 mod tests {
-    use crate::common::damage::PoisonDamageType;
     use crate::objects::object::Object;
-    use crate::objects::consumable::DamagePotion;
+    use crate::objects::consumable::Consumable;
     use crate::objects::weapons::common::*;
+    use crate::common::status::StatusType::*;
     
     use super::*;
 
@@ -128,8 +128,8 @@ mod tests {
             2.0,
             20,
         );
-        let object = Object::new(1, String::from("Test Poison"), String::from("This is a test poison"), 10, 20);
-        let potion = Box::new(DamagePotion::new(object, PoisonDamageType::Acid));
+        let object = Object::new(1, String::from("Test potion"), String::from("This is a test potion"), 10, 20);
+        let potion = Box::new(Consumable::new(object, (vec![(Terror, 10)], vec![])));
         melee_weapon.apply_potion_on_object(potion);
         assert!(melee_weapon.applicable.is_some());
     }
