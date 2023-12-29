@@ -32,10 +32,10 @@ pub struct BodyPart{
 // TODO: move in common
 pub enum StatusType{
     // control
-    Stun,      // unable to act
+    Stun,      // unable to act and falls to the ground
     Sleep,     // similar to stun, but can be woken up
     Taunt,     // forced to attack the taunter
-    Petrify,   // similar to paralyze, but gain armor
+    Rooted,    // unable to move lower parts of the body, but can still act
     Charm,     // forced to attack allies
     Terror,    // forced to flee
     
@@ -45,6 +45,9 @@ pub enum StatusType{
 
     // good statuses
     Invisible,
+    Unstoppable,    // immune to control statuses
+    Invincible,     // immune to any type of damage or control
+    Immortal,       // immune to death, but can take damage or be conrtolled
     UnderwaterBreathing,
 
     // neutral statuses
@@ -69,7 +72,7 @@ impl Actor{
 
 
 impl Body{
-    pub fn new(body_parts: Vec<BodyPart>, height: u32, weight: u32, armor_low: f32) -> Body{
+    pub fn new(body_parts: Vec<BodyPart>, height: u32, weight: u32) -> Body{
         let mut n_able_arts = 0;
         let mut n_able_arts_available = 0;
         for body_part in body_parts.iter(){
@@ -116,6 +119,7 @@ impl BodyPart{
 
 
 impl Damageable for BodyPart {
+    // TODO: move this into the default implementation of the trait and add difference between damage types
     fn damage(&mut self, damage: Damage) -> DamageResult{
         if damage.amount < self.armor_low as f32{
             DamageResult::NoDamage
@@ -143,7 +147,7 @@ mod tests {
 
     #[test]
     fn test_actor_new() {
-        let body = Body::new(vec![], 180, 70, 0.5);
+        let body = Body::new(vec![], 180, 70);
         let base_stats = Stats::new_random();
         let actor = Actor::new(body, base_stats);
         assert_eq!(actor.base_stats, base_stats);
@@ -153,7 +157,7 @@ mod tests {
     // TODO
     #[test]
     fn test_actor_get_stats() {
-        let body = Body::new(vec![], 180, 70, 0.5);
+        let body = Body::new(vec![], 180, 70);
         let base_stats = Stats::new_random();
         let stat_modifiers = Stats::new_random();
         let mut actor = Actor::new(body, base_stats.clone());
@@ -169,7 +173,7 @@ mod tests {
             BodyPart::new("Hand".to_string(), false, true, 10, 10, XPosition::Left, YPosition::Low),
             BodyPart::new("Head".to_string(), true, false, 20, 20, XPosition::Mid, YPosition::High),
         ];
-        let body = Body::new(body_parts, 180, 70, 0.5);
+        let body = Body::new(body_parts, 180, 70);
         assert_eq!(body.height, 180);
         assert_eq!(body.weight, 70);
         assert_eq!(body.n_able_arts, 1);
