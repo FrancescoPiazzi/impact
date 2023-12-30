@@ -108,9 +108,7 @@ impl Damageable for BodyPart {
             }
         }
         else{
-            // TODO: refine this i.e. use a third order polynomial parametrized by damage.amount 
-            // that is 0 at armor_low and damage.amount at armor_high
-            DamageResult::Damage(damage.amount)
+            DamageResult::Damage(damage.amount - self.armor_low as f32)
         }
     }
 }
@@ -170,7 +168,7 @@ mod tests {
 
         let damage = Damage { amount: 15.0, damage_type: DamageType::Elemental(ElementalDamageType::Cold) };
         let result = body_part.damage(damage);
-        assert_eq!(result, DamageResult::Damage(15.0));
+        assert_eq!(result, DamageResult::Damage(5.0));
 
         let damage = Damage { amount: 50.0, damage_type: DamageType::Elemental(ElementalDamageType::Cold) };
         let result = body_part.damage(damage);
